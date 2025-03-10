@@ -18,7 +18,7 @@ interface ImageFormProps {
 }
 
 const formSchema = z.object({
-  ImageUrl: z.string().min(1, {
+  imageUrl: z.string().min(1, {
     message: "Image is required",
   }),
 });
@@ -31,7 +31,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
+      await axios.patch(`/api/courses/${courseId}`, { imageUrl: url });
       toast.success("Course updated");
       toggleEdit();
       router.refresh();
@@ -40,8 +40,8 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
     }
   };
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
-      <div className=" font-medium flex items-center justify-between">
+    <div className="mt-6 bg-slate-100 rounded-md p-4">
+      <div className="font-medium flex items-center justify-between">
         Course Image
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && <>Cancel</>}
@@ -79,8 +79,9 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {
+              console.log("Uploaded Image URL:", url); // Debug log
               if (url) {
-                onSubmit({ ImageUrl: url });
+                onSubmit({ imageUrl: url });
               }
             }}
           />
@@ -92,3 +93,5 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
     </div>
   );
 };
+
+export default ImageForm;
