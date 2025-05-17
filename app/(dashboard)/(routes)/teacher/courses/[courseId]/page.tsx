@@ -1,22 +1,29 @@
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
+import prisma from "@/app/libs/prismadb";
 import { IconBadge } from "@/components/icon-badge";
 import { LayoutDashboard } from "lucide-react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-from";
 import { ImageForm } from "./_components/image-form";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
-const CourseIdPage = async ({ params }: { params?: { courseId?: string } }) => {
-  if (!params?.courseId) {
-    return redirect("/");
-  }
+export default async function CourseIdPage({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  const courseId = params["courseId"];
 
-  const { userId } = await auth();
-  if (!userId) return redirect("/");
+  if (!courseId) return redirect("/");
 
-  const course = await db.course.findUnique({
-    where: { id: params.courseId },
+  const currentUser = await getCurrentUser();
+  if (!currentUser) return redirect("/");
+
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+      userId: currentUser.id,
+    },
   });
 
   if (!course) return redirect("/");
@@ -29,9 +36,8 @@ const CourseIdPage = async ({ params }: { params?: { courseId?: string } }) => {
     course.categoryId,
   ];
 
-  const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
-  const completionText = `(${completedFields}/${totalFields})`;
+  const completionText = `(${completedFields}/${requiredFields.length})`;
 
   return (
     <div className="p-6">
@@ -56,6 +62,4 @@ const CourseIdPage = async ({ params }: { params?: { courseId?: string } }) => {
       </div>
     </div>
   );
-};
-
-export default CourseIdPage;
+}

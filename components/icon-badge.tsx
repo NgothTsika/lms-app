@@ -1,7 +1,7 @@
 import { LucideIcon } from "lucide-react";
 import { cva, VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/libs/utils";
 
 const backgroundVariants = cva(
   "rounded-full flex items-center justify-center",

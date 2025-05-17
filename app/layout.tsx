@@ -1,7 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+
+import AuthContext from "@/app/context/AuthContext";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
@@ -28,16 +30,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthContext>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ToasterProvider />
           {children}
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthContext>
+      </body>
+    </html>
   );
 }
