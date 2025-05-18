@@ -1,18 +1,27 @@
 import { redirect } from "next/navigation";
-import prisma from "@/app/libs/prismadb";
+import prisma from "@/lib/prismadb";
 import { IconBadge } from "@/components/icon-badge";
-import { LayoutDashboard } from "lucide-react";
+import {
+  CircleDollarSign,
+  File,
+  FileArchive,
+  FileDigit,
+  LayoutDashboard,
+  ListCheck,
+} from "lucide-react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-from";
 import { ImageForm } from "./_components/image-form";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import { CategoryForm } from "./_components/category-form";
+import { PriceForm } from "./_components/price-form";
+import AttachmentForm from "./_components/attachment-form";
+import { ChaptersForm } from "./_components/chapters-from";
 
-export default async function CourseIdPage({
-  params,
-}: {
+export default async function CourseIdPage(context: {
   params: { courseId: string };
 }) {
-  const courseId = params["courseId"];
+  const courseId = context.params.courseId;
 
   if (!courseId) return redirect("/");
 
@@ -23,6 +32,19 @@ export default async function CourseIdPage({
     where: {
       id: courseId,
       userId: currentUser.id,
+    },
+    include: {
+      attachments: {
+        orderBy: {
+          createAt: "desc",
+        },
+      },
+    },
+  });
+
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
     },
   });
 
@@ -58,6 +80,38 @@ export default async function CourseIdPage({
           <TitleForm initialData={course} courseId={course.id} />
           <DescriptionForm initialData={course} courseId={course.id} />
           <ImageForm initialData={course} courseId={course.id} />
+          <CategoryForm
+            initialData={course}
+            courseId={course.id}
+            options={categories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            }))}
+          />
+        </div>
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={ListCheck} />
+              <h2 className="text-xl">Course Chapters</h2>
+            </div>
+            <ChaptersForm initialData={course} courseId={course.id} />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={CircleDollarSign} />
+              <h2 className="text-xl">Sell your course</h2>
+            </div>
+            <PriceForm initialData={course} courseId={course.id} />
+          </div>
+          {/* attachement  */}
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={FileArchive} />
+              <h2 className="text-xl">Resources & Attachment</h2>
+            </div>
+            <AttachmentForm initialData={course} courseId={course.id} />
+          </div>
         </div>
       </div>
     </div>

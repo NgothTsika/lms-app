@@ -5,6 +5,13 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import Avatar from "./ui/Avatar";
 
 export const NavbarRoutes = () => {
   const { data: session } = useSession();
@@ -33,16 +40,30 @@ export const NavbarRoutes = () => {
           </Button>
         </Link>
       )}
-      {session && (
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={handleSignOut}
-          className="flex items-center"
-        >
-          <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
-        </Button>
+
+      {session?.user && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="cursor-pointer rounded-full overflow-hidden border border-yellow-500">
+              <Avatar src={session.user.image || undefined} />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem
+              disabled
+              className="text-sm text-muted-foreground truncate"
+            >
+              {session.user.email}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleSignOut}
+              className="cursor-pointer"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   );
