@@ -1,50 +1,24 @@
-// "use client";
-// import toast from "react-hot-toast";
-
-// import { UploadDropzone } from "@/lib/uploadthing";
-// import { ourFileRouter } from "@/app/api/uploadthing/core";
-
-// interface FileUploadProps {
-//   onChange: (url?: string) => void;
-//   endpoint: keyof typeof ourFileRouter;
-// }
-// export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => {
-//   return (
-//     <UploadDropzone
-//       endpoint={endpoint}
-//       onClientUploadComplete={(res: { url: string }[]) => {
-//         onChange(res?.[0].url);
-//       }}
-//       onUploadError={(error: Error) => {
-//         toast.error(`${error?.message}`);
-//       }}
-//     />
-//   );
-// };
-
 "use client";
 
-import { UploadDropzone } from "@/lib/uploadthing";
+import { UploadDropzone } from "@uploadthing/react";
 import toast from "react-hot-toast";
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 interface FileUploadProps {
   onChange: (url?: string) => void;
-  endpoint: "courseImage" | "courseAttachment" | "chapterVideo";
+  endpoint: keyof OurFileRouter; // "courseImage" | "courseAttachment" | "chapterVideo"
 }
 
 export const FileUpload = ({ onChange, endpoint }: FileUploadProps) => {
   return (
-    <UploadDropzone
+    <UploadDropzone<OurFileRouter, typeof endpoint>
       endpoint={endpoint}
-      onClientUploadComplete={(res) => {
-        if (res && res.length > 0) {
-          onChange(res[0].url);
-        } else {
-          toast.error("Upload failed. No file returned.");
-        }
+      onClientUploadComplete={(res: { url: string }[]) => {
+        if (res?.[0]?.url) onChange(res[0].url);
+        else toast.error("No file returned");
       }}
-      onUploadError={(error: Error) => {
-        toast.error(error.message || "Upload failed");
+      onUploadError={(err: Error) => {
+        toast.error(err.message);
       }}
     />
   );

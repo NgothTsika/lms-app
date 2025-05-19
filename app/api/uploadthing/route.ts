@@ -1,8 +1,6 @@
-import { createRouteHandler } from "uploadthing/next";
+import { createRouteHandler } from "uploadthing/server";
 import { ourFileRouter } from "./core";
 
 console.log("✅ /api/uploadthing route is active !");
-
-export const { GET, POST } = createRouteHandler({
-  router: ourFileRouter,
-});
+const handler = createRouteHandler({ router: ourFileRouter });
+export { handler as GET, handler as POST };

@@ -133,3 +133,7 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap {
+  @apply prose max-w-none prose-headings:font-semibold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-h5:text-base prose-h6:text-sm prose-p:leading-relaxed prose-a:underline prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-1 prose-code:rounded prose-pre:bg-black prose-pre:text-white prose-pre:p-4 prose-pre:rounded-lg prose-ul:pl-6 prose-ol:pl-6 prose-li:marker:text-gray-400 prose-hr:my-8;
+}

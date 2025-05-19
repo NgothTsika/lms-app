@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "utfs.io",
+        hostname: "2itgugo8xs.ufs.sh",
+        // hostname: "utfs.io",
         pathname: "/**",
       },
     ],

@@ -78,7 +78,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           </div>
         ))}
       {isEditing && (
-        <div className="border border-dashed p-4 rounded-md">
+        <form onSubmit={(e) => e.preventDefault()}>
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {
@@ -91,7 +91,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           <div className="text-xs text-muted-foreground mt-4">
             16:9 aspect ratio recommended
           </div>
-        </div>
+        </form>
       )}
     </div>
   );
