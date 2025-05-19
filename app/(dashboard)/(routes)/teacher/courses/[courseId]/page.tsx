@@ -1,27 +1,29 @@
+export const runtime = "nodejs";
+
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prismadb";
 import { IconBadge } from "@/components/icon-badge";
 import {
   CircleDollarSign,
-  File,
   FileArchive,
-  FileDigit,
   LayoutDashboard,
   ListCheck,
 } from "lucide-react";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-from";
 import { ImageForm } from "./_components/image-form";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import { CategoryForm } from "./_components/category-form";
 import { PriceForm } from "./_components/price-form";
 import AttachmentForm from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-from";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
-export default async function CourseIdPage(context: {
+export default async function CourseIdPage({
+  params,
+}: {
   params: { courseId: string };
 }) {
-  const courseId = context.params.courseId;
+  const courseId = params.courseId;
 
   if (!courseId) return redirect("/");
 
@@ -34,18 +36,13 @@ export default async function CourseIdPage(context: {
       userId: currentUser.id,
     },
     include: {
-      attachments: {
-        orderBy: {
-          createAt: "desc",
-        },
-      },
+      chapters: { orderBy: { position: "asc" } },
+      attachments: { orderBy: { createAt: "desc" } },
     },
   });
 
   const categories = await prisma.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
+    orderBy: { name: "asc" },
   });
 
   if (!course) return redirect("/");
@@ -56,6 +53,7 @@ export default async function CourseIdPage(context: {
     course.imageUrl,
     course.price,
     course.categoryId,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const completedFields = requiredFields.filter(Boolean).length;
@@ -71,6 +69,7 @@ export default async function CourseIdPage(context: {
           </span>
         </div>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
         <div>
           <div className="flex items-center gap-x-2">
@@ -89,6 +88,7 @@ export default async function CourseIdPage(context: {
             }))}
           />
         </div>
+
         <div className="space-y-6">
           <div>
             <div className="flex items-center gap-x-2">
@@ -104,7 +104,6 @@ export default async function CourseIdPage(context: {
             </div>
             <PriceForm initialData={course} courseId={course.id} />
           </div>
-          {/* attachement  */}
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={FileArchive} />

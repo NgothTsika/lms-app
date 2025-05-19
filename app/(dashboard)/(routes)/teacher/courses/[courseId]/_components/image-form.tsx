@@ -32,7 +32,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, {
-        imageUrl: initialData?.imageUrl || "",
+        imageUrl: values.imageUrl, // ✅ use uploaded image URL
       });
       toast.success("Course updated");
       toggleEdit();
@@ -41,6 +41,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
       toast.error("Something went wrong");
     }
   };
+
   return (
     <div className="mt-6 bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
@@ -77,7 +78,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           </div>
         ))}
       {isEditing && (
-        <div>
+        <div className="border border-dashed p-4 rounded-md">
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {

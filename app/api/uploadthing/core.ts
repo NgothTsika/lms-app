@@ -1,12 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
 
 const handleAuth = async () => {
-  const session = await auth();
-  if (!session?.userId) throw new Error("Unauthorized");
-  return { userId: session.userId };
+  const user = await getCurrentUser();
+  if (!user?.id) throw new Error("Unauthorized");
+  return { userId: user.id };
 };
 
 export const ourFileRouter = {
@@ -14,7 +14,6 @@ export const ourFileRouter = {
     .middleware(async () => await handleAuth())
     .onUploadComplete(async ({ file }) => {
       console.log("✅ Image uploaded:", file);
-      // Send a callback request to your Next.js API route
       await fetch(
         `${process.env.UPLOADTHING_CALLBACK_URL}/api/uploadthing/callback`,
         {
@@ -31,7 +30,6 @@ export const ourFileRouter = {
     .middleware(async () => await handleAuth())
     .onUploadComplete(async ({ file }) => {
       console.log("✅ Attachment uploaded:", file);
-      // Send a callback request to your Next.js API route
       await fetch(
         `${process.env.UPLOADTHING_CALLBACK_URL}/api/uploadthing/callback`,
         {
@@ -48,7 +46,6 @@ export const ourFileRouter = {
     .middleware(async () => await handleAuth())
     .onUploadComplete(async ({ file }) => {
       console.log("✅ Chapter video uploaded:", file);
-      // Send a callback request to your Next.js API route
       await fetch(
         `${process.env.UPLOADTHING_CALLBACK_URL}/api/uploadthing/callback`,
         {
