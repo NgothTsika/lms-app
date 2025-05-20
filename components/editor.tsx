@@ -6,13 +6,27 @@ import {
   type EditorOptions,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { Color } from "@tiptap/extension-color";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import { Mark, mergeAttributes, RawCommands } from "@tiptap/core";
 import React from "react";
-import { BoldIcon } from "lucide-react";
+import TextStyle from "@tiptap/extension-text-style";
+import ListItem from "@tiptap/extension-list-item";
+import {
+  Bold,
+  Code,
+  CodeIcon,
+  Italic,
+  MoveLeft,
+  MoveRight,
+  Quote,
+  Ruler,
+  Strikethrough,
+} from "lucide-react";
+import { BsParagraph, BsTypeStrikethrough } from "react-icons/bs";
 
 // Custom Uppercase Mark
 const Uppercase = Mark.create({
@@ -64,32 +78,33 @@ const MenuBar = () => {
       <Btn
         onClick={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
-        label={<BoldIcon className="w-4 h-4" />}
+        label={<Bold className="w-4 h-4" />}
       />
       <Btn
         onClick={() => editor.chain().focus().toggleItalic().run()}
         active={editor.isActive("italic")}
-        label={<em>I</em>}
+        label={<Italic className="w-4 h-4" />}
       />
       <Btn
         onClick={() => editor.chain().focus().toggleStrike().run()}
         active={editor.isActive("strike")}
-        label={<s>S</s>}
+        label={<BsTypeStrikethrough className="w-4 h-4" />}
       />
       <Btn
         onClick={() => editor.chain().focus().setParagraph().run()}
         active={editor.isActive("paragraph")}
-        label={"¶"}
+        label={<BsParagraph className="w-4 h-4" />}
       />
       <Btn
         onClick={() => editor.chain().focus().toggleHighlight().run()}
         active={editor.isActive("highlight")}
         label={"Highlight"}
       />
+
       <Btn
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
         active={editor.isActive({ textAlign: "left" })}
-        label={"Left"}
+        label={<MoveLeft className="w-4 h-4" />}
       />
       <Btn
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
@@ -99,14 +114,14 @@ const MenuBar = () => {
       <Btn
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
         active={editor.isActive({ textAlign: "right" })}
-        label={"Right"}
+        label={<MoveRight className="w-4 h-4" />}
       />
       <Btn
         onClick={() => editor.chain().focus().setTextAlign("justify").run()}
         active={editor.isActive({ textAlign: "justify" })}
-        label={"Justify"}
+        label={<Strikethrough className="w-4 h-4" />}
       />
-      {[1, 2, 3, 4, 5, 6].map((level) => (
+      {[1, 2, 3, 4].map((level) => (
         <Btn
           key={level}
           onClick={() =>
@@ -123,23 +138,19 @@ const MenuBar = () => {
       <Btn
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         active={editor.isActive("bulletList")}
-        label={"• List"}
+        label={"•"}
       />
       <Btn
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         active={editor.isActive("orderedList")}
-        label={"1. List"}
+        label={"1."}
       />
       <Btn
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         active={editor.isActive("codeBlock")}
-        label={"Code Block"}
+        label={<CodeIcon className="w-4 h-4" />}
       />
-      <Btn
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        active={editor.isActive("blockquote")}
-        label={'" Quote'}
-      />
+
       <Btn
         onClick={() => {
           const url = window.prompt("Enter URL");
@@ -155,6 +166,21 @@ const MenuBar = () => {
         active={editor.isActive("link")}
         label={"🔗 Link"}
       />
+      <Btn
+        onClick={() => editor.chain().focus().toggleCode().run()}
+        active={editor.isActive("code")}
+        label={<Code className="w-4 h-4" />}
+      />
+      <Btn
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        active={editor.isActive("blockquote")}
+        label={<Quote className="w-4 h-4" />}
+      />
+      <Btn
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        active={editor.isActive("horizontalRule")}
+        label={<Ruler className="w-4 h-4" />}
+      />
     </div>
   );
 };
@@ -168,7 +194,16 @@ type EditorProps = {
 export const Editor = ({ value, onChange }: EditorProps) => {
   const editorOptions: Partial<EditorOptions> = {
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+      }),
       Link.configure({
         openOnClick: true,
         HTMLAttributes: {
@@ -181,6 +216,10 @@ export const Editor = ({ value, onChange }: EditorProps) => {
         placeholder: "Write something awesome...",
       }),
       Uppercase,
+      TextStyle,
+      Color.configure({
+        types: [TextStyle.name, ListItem.name],
+      }),
     ],
     content: value,
     onUpdate({ editor }) {
@@ -195,7 +234,7 @@ export const Editor = ({ value, onChange }: EditorProps) => {
   };
 
   return (
-    <div className="bg-white border border-gray-300 rounded-md min-h-[300px] flex flex-col p-4">
+    <div className="bg-white border border-gray-300 rounded-md min-h-[300px] max-w-[250px] flex flex-col p-4">
       <EditorProvider
         extensions={editorOptions.extensions!}
         content={editorOptions.content}

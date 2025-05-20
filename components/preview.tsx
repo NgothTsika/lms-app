@@ -23,7 +23,7 @@ export const Preview = ({ value }: PreviewProps) => {
   }, [editor, value]);
 
   return (
-    <div className="prose max-w-full">
+    <div className="prose max-w-full ">
       <EditorContent editor={editor} />
     </div>
   );
