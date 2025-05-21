@@ -168,13 +168,13 @@ body,
   h3,
   h4 {
     line-height: 1.1;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
     text-wrap: pretty;
   }
 
   h1,
   h2 {
-    margin-top: 3.5rem;
+    margin-top: 1.5rem;
     margin-bottom: 1.5rem;
   }
 
@@ -190,9 +190,13 @@ body,
     font-size: 1.1rem;
   }
 
+  h4 {
+    font-size: 1rem;
+  }
+
   /* Code and preformatted text styles */
   code {
-    background-color: rgb(247 242 255);
+    background-color: #faf594;
     border-radius: 0.4rem;
     color: rgb(0 0 0);
     font-size: 0.85rem;
@@ -233,5 +237,10 @@ body,
     border-left: 3px solid rgb(46 43 30);
     margin: 1.5rem 0;
     padding-left: 1rem;
+  }
+  center {
+    justify-content: center;
+    text-align: center;
+    display: flex;
   }
 }

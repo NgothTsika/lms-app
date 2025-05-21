@@ -12,33 +12,34 @@ import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
-  FormMessage,
 } from "@/components/ui/form";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Editor } from "@/components/editor";
-import { Preview } from "@/components/preview";
+import { Checkbox } from "@/components/ui/checkbox";
 
-interface ChapterDescriptionFormProps {
-  initialData: { description: string };
+interface ChapterAccessFormProps {
+  initialData: {
+    isFree: any;
+    Chapter: string;
+  };
   courseId: string;
   chapterId: string;
 }
 
 const formSchema = z.object({
-  description: z.string().min(1, "Description est requise"),
+  isFree: z.boolean().default(false),
 });
 
-export const ChapterDescriptionForm = ({
+export const ChapterAccessForm = ({
   initialData,
   courseId,
   chapterId,
-}: ChapterDescriptionFormProps) => {
+}: ChapterAccessFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState(initialData.description); // ✅ local state
 
   const toggleEdit = () => setIsEditing((prev) => !prev);
   const router = useRouter();
@@ -46,7 +47,7 @@ export const ChapterDescriptionForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description,
+      isFree: !!initialData.isFree,
     },
   });
 
@@ -59,7 +60,6 @@ export const ChapterDescriptionForm = ({
         values
       );
       toast.success("Chapitre mis à jour");
-      setDescription(values.description); // ✅ update local state
       toggleEdit();
       router.refresh(); // optional: in case you want to re-fetch server data
     } catch (error) {
@@ -70,45 +70,57 @@ export const ChapterDescriptionForm = ({
   return (
     <div className="mt-6 bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Description du chapitre
+        Chapter access
         <Button onClick={toggleEdit} variant="ghost" size="sm">
           {isEditing ? (
             "Annuler"
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier
+              Edit
             </>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        <div
+        <p
           className={cn(
-            "text-sm mt-2",
-            !description && "text-slate-500 italic"
+            "text-sm mt-2 ",
+            !initialData.isFree && "text-slate-500 italic"
           )}
         >
-          {!description ? "No description" : <Preview value={description} />}
-        </div>
+          {initialData.isFree ? (
+            <>This chapter is free for preview</>
+          ) : (
+            <>This chapter is not free.</>
+          )}
+        </p>
       )}
 
       {isEditing && (
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4 "
+            className="space-y-4 mt-4"
           >
             <FormField
               control={form.control}
-              name="description"
+              name="isFree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className=" flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Editor value={field.value} onChange={field.onChange} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <div className="space-y-1 leading-none">
+                    <FormDescription>
+                      Check this box if you want to make this chapter free for
+                      preview
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />

@@ -1,6 +1,12 @@
+import { Mux } from "@mux/mux-node";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
+
+const mux = new Mux({
+  tokenId: process.env.MUX_TOKEN_ID!,
+  tokenSecret: process.env.MUX_TOKEN_SECRET!,
+});
 
 export async function PATCH(
   req: Request,
@@ -13,6 +19,7 @@ export async function PATCH(
     if (!currentUser) {
       return new Response("Unauthorized", { status: 401 });
     }
+
     const ownCourse = await prisma.course.findFirst({
       where: {
         id: params.courseId,
@@ -33,6 +40,38 @@ export async function PATCH(
         ...values,
       },
     });
+
+    if (values.videoUrl) {
+      const existingMuxData = await prisma.muxData.findFirst({
+        where: {
+          chapterId: params.chapterId,
+        },
+      });
+
+      if (existingMuxData) {
+        await mux.video.assets.delete(existingMuxData.assetId);
+        await prisma.muxData.delete({
+          where: {
+            id: existingMuxData.id,
+          },
+        });
+      }
+
+      const asset = await mux.video.assets.create({
+        input: values.videoUrl,
+        playback_policy: ["public"],
+        inputs: [],
+      });
+
+      await prisma.muxData.create({
+        data: {
+          chapterId: params.chapterId,
+          assetId: asset.id,
+          playbackId: asset.playback_ids?.[0]?.id,
+        },
+      });
+    }
+
     return NextResponse.json(chapter);
   } catch (error) {
     console.log("[COURSES_CHAPTER_ID]", error);

@@ -123,3 +123,10 @@ mark {
   padding: 0.1rem 0.3rem;
 }
 
+
+
+### to install
+
+npm i @mux/mux-node @mux/mux-player-react --legacy-peer-deps
+
+npm i shadcn@latest add alert-dialog

@@ -5,7 +5,7 @@ import prisma from "@/lib/prismadb";
 import { IconBadge } from "@/components/icon-badge";
 import {
   CircleDollarSign,
-  FileArchive,
+  Files,
   LayoutDashboard,
   ListCheck,
 } from "lucide-react";
@@ -106,7 +106,7 @@ export default async function CourseIdPage({
           </div>
           <div>
             <div className="flex items-center gap-x-2">
-              <IconBadge icon={FileArchive} />
+              <IconBadge icon={Files} />
               <h2 className="text-xl">Resources & Attachment</h2>
             </div>
             <AttachmentForm initialData={course} courseId={course.id} />
