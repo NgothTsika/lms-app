@@ -1,6 +1,58 @@
+import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+
+const mux = new Mux({
+  tokenId: process.env.MUX_TOKEN_ID!,
+  tokenSecret: process.env.MUX_TOKEN_SECRET!,
+});
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { courseId: string; chapterId: string } }
+) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const course = await prisma.course.findUnique({
+      where: {
+        id: params.courseId,
+        userId: currentUser.id,
+      },
+      include: {
+        chapters: {
+          include: {
+            muxData: true,
+          },
+        },
+      },
+    });
+
+    if (!course) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+
+    for (const chapter of course.chapters) {
+      if (chapter.muxData?.assetId) {
+        await mux.video.assets.delete(chapter.muxData.assetId);
+      }
+    }
+
+    const deletedCourse = await prisma.chapter.delete({
+      where: {
+        id: params.chapterId,
+      },
+    });
+
+    return NextResponse.json(deletedCourse);
+  } catch (error) {
+    console.error("[COURSE_ID_DELETE]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
 
 export async function PATCH(
   req: Request,

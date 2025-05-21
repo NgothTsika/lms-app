@@ -4,7 +4,7 @@ import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Loader, Loader2, LoaderPinwheel, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -82,10 +82,10 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   };
 
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
+    <div className="relative mt-6 bg-slate-100 rounded-md p-4">
       {isUpdating && (
-        <div className=" h-full w-full flex items-center justify-center ">
-          <Loader className=" animate-spin h-6 w-6 text-sky-700" />
+        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center ">
+          <Loader2 className=" animate-spin h-6 w-6 text-sky-700" />
         </div>
       )}
       <div className=" font-medium flex items-center justify-between">

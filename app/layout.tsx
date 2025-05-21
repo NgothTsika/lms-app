@@ -7,7 +7,8 @@ import AuthContext from "@/app/context/AuthContext";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
-import ToasterProvider from "@/providers/ToasterProvider";
+import ToasterProvider from "@/components/providers/ToasterProvider";
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
       >
         <AuthContext>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+          <ConfettiProvider />
           <ToasterProvider />
           {children}
         </AuthContext>

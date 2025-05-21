@@ -44,9 +44,9 @@ export const NavbarRoutes = () => {
       {session?.user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="cursor-pointer rounded-full overflow-hidden border border-yellow-500">
+            <button className="rounded-full overflow-hidden border border-yellow-500">
               <Avatar src={session.user.image || undefined} />
-            </div>
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem

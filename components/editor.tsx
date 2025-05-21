@@ -80,7 +80,7 @@ const MenuBar = () => {
   );
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4 pb-1 border-b-2">
+    <div className="flex flex-wrap gap-2 border p-2 rounded-md bg-white">
       <div className="p-2 space-x-2 border-r">
         <Btn
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -185,7 +185,7 @@ const MenuBar = () => {
       </div>
       {/* heading */}
 
-      {[1, 2, 2, 4].map((level) => (
+      {[1, 2, 3, 4].map((level) => (
         <Btn
           key={level}
           onClick={() =>
