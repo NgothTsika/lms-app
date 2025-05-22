@@ -41,9 +41,9 @@ export async function DELETE(
       }
     }
 
-    const deletedCourse = await prisma.chapter.delete({
+    const deletedCourse = await prisma.course.delete({
       where: {
-        id: params.chapterId,
+        id: params.courseId,
       },
     });
 

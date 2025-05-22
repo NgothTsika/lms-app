@@ -48,11 +48,7 @@ export const columns: ColumnDef<Course>[] = [
         style: "currency",
         currency: "GHS",
       }).format(price);
-      return (
-        <div className={cn("bg-slate-500", price && "bg-sky-700")}>
-          {formatted}
-        </div>
-      );
+      return <div>{formatted}</div>;
     },
   },
   {
