@@ -1,4 +1,4 @@
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
@@ -7,7 +7,7 @@ export async function DELETE(
   { params }: { params: { courseId: string; attachmentId: string } }
 ) {
   try {
-    const currentUser = getCurrentUser();
+    const currentUser = await getCurrentUser();
 
     if (!currentUser) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -16,7 +16,7 @@ export async function DELETE(
     const courseOwner = await prisma.course.findUnique({
       where: {
         id: params.courseId,
-        userId: currentUser,
+        userId: currentUser.id,
       },
     });
 

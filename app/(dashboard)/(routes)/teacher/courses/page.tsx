@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 import { redirect } from "next/navigation";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/actions/getCurrentUser";
 import prisma from "@/lib/prismadb";
 
 const CoursesPage = async () => {

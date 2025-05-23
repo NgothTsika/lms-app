@@ -32,7 +32,7 @@ const Select: React.FC<SelectProps> = ({
           options={options}
           menuPortalTarget={document.body}
           styles={{
-            menuPortal: (base) => ({
+            menuPortal: (base: any) => ({
               ...base,
               zIndex: 9999,
             }),

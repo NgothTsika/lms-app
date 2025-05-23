@@ -6,7 +6,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "2itgugo8xs.ufs.sh",
-        // hostname: "utfs.io",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io", // ✅ Add this to fix your error
         pathname: "/**",
       },
     ],

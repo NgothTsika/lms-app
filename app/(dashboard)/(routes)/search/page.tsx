@@ -2,7 +2,7 @@ import prisma from "@/lib/prismadb";
 import Categories from "./_components/categories";
 import { SearchInput } from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/actions/getCurrentUser";
 import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
 
@@ -35,7 +35,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
       <div className="px-6 pt-6 md:hidden md:mb-0 block">
         <SearchInput />
       </div>
-      <div className="p-6">
+      <div className="p-6 space-y-4">
         <Categories items={categories} />
         <CoursesList items={courses} />
       </div>

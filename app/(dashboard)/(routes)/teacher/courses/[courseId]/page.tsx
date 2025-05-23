@@ -16,7 +16,7 @@ import { CategoryForm } from "./_components/category-form";
 import { PriceForm } from "./_components/price-form";
 import AttachmentForm from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-from";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/actions/getCurrentUser";
 import { Banner } from "@/components/banner";
 import Actions from "./_components/actions";
 

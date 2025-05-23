@@ -1,4 +1,4 @@
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/actions/getCurrentUser";
 import { IconBadge } from "@/components/icon-badge";
 import prisma from "@/lib/prismadb";
 import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";

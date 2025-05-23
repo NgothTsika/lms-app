@@ -1,7 +1,7 @@
 import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
-import getCurrentUser from "@/app/actions/getCurrentUser";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 const mux = new Mux({
   tokenId: process.env.MUX_TOKEN_ID!,
