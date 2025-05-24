@@ -34,9 +34,9 @@ export const AttachmentForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, {
-        imageUrl: initialData?.imageUrl || "",
+        url: values.url,
       });
-      toast.success("Course updated");
+      toast.success("Attachment added");
       toggleEdit();
       router.refresh();
     } catch (error) {

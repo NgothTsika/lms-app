@@ -1,6 +1,9 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import MuxPlayer from "@mux/mux-player-react";
 import { Loader2, Lock } from "lucide-react";
+import { useState } from "react";
 
 interface VideoPlayerProps {
   playbackId: string;
@@ -21,9 +24,10 @@ const VideoPlayer = ({
   isLocked,
   nextChapterId,
 }: VideoPlayerProps) => {
+  const [isReady, setIsReady] = useState(false);
   return (
     <div className=" relative aspect-video">
-      {!isLocked && (
+      {!isReady && !isLocked && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-800 ">
           <Loader2 className=" h-8 w-8 animate-spin text-secondary" />
         </div>
@@ -36,6 +40,16 @@ const VideoPlayer = ({
             this chapter.
           </p>
         </div>
+      )}
+      {!isLocked && (
+        <MuxPlayer
+          title={title}
+          className={cn(!isReady && "hidden")}
+          onCanPlay={() => setIsReady(true)}
+          onEnded={() => {}}
+          autoPlay
+          playbackId={playbackId}
+        />
       )}
     </div>
   );

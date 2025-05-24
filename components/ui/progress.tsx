@@ -1,15 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
+import * as React from "react";
+import * as ProgressPrimitive from "@radix-ui/react-progress";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
+
+const progressVariants = cva("h-full w-full flex-1 bg-primary transition-all", {
+  variants: {
+    variant: {
+      default: "bg-sky-600",
+      success: "bg-emerald-700",
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+});
+
+export interface ProgressProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof progressVariants> {}
+
+type CombinedProgressProps = ProgressProps &
+  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>;
 
 function Progress({
   className,
-  value,
+  value = 0,
+  variant,
   ...props
-}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+}: CombinedProgressProps & { value?: number }) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
@@ -21,11 +42,11 @@ function Progress({
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className="bg-primary h-full w-full flex-1 transition-all"
+        className={cn(progressVariants({ variant }))}
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>
-  )
+  );
 }
 
-export { Progress }
+export { Progress };
