@@ -7,7 +7,7 @@ export const getProgress = async (
   try {
     const publishedChapters = await prisma.chapter.findMany({
       where: {
-        courseId: courseId,
+        courseId,
         isPublished: true,
       },
       select: {
@@ -15,24 +15,28 @@ export const getProgress = async (
       },
     });
 
-    const publishedChaptersIds = publishedChapters.map((chapter) => chapter.id);
+    const publishedChapterIds = publishedChapters.map((chapter) => chapter.id);
+
+    if (publishedChapterIds.length === 0) {
+      return 0;
+    }
 
     const validCompletedChapters = await prisma.userProgress.count({
       where: {
-        userId: userId,
+        userId,
         chapterId: {
-          in: publishedChaptersIds,
+          in: publishedChapterIds,
         },
         isCompleted: true,
       },
     });
 
     const progressPercentage =
-      (validCompletedChapters / publishedChaptersIds.length) * 100;
+      (validCompletedChapters / publishedChapterIds.length) * 100;
 
     return progressPercentage;
   } catch (error) {
-    console.log("GET_PROGESS", error);
+    console.log("GET_PROGRESS", error);
     return 0;
   }
 };
