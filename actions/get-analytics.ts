@@ -37,6 +37,12 @@ export const getAnalytics = async (userId: string) => {
 
     const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
     const totalSales = purchases.length;
+
+    return {
+      data,
+      totalRevenue,
+      totalSales,
+    };
   } catch (error) {
     console.error("GET_ANALYTICS_ERROR", error);
     return { data: [], totalRevenue: 0, totalSales: 0 };
