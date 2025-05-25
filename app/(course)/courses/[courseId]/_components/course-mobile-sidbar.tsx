@@ -20,7 +20,7 @@ export const CourseMobileSidbar = ({
       <SheetTrigger className="md:hidden pr-4 transition">
         <Menu />
       </SheetTrigger>
-      <SheetContent className=" p-0 bg-white w-72">
+      <SheetContent className=" p-0 bg-white w-72" side="left">
         <CourseSidebar course={course} progressCount={progressCount} />
       </SheetContent>
     </Sheet>
