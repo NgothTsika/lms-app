@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     UPLOADTHING_CALLBACK_URL: process.env.UPLOADTHING_CALLBACK_URL,
   },
+  
 };
 
 export default nextConfig;
