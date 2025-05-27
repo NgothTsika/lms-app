@@ -6,22 +6,25 @@ import { getProgress } from "@/actions/get-progress";
 import CourseSidebar from "./_components/course-sidebar";
 import CourseNavbar from "./_components/course-navbar";
 
-const CourseLayout = async ({
-  children,
-  params,
-}: {
+interface CourseLayoutProps {
   children: React.ReactNode;
-  params: { courseId: string };
-}) => {
-  const currentUser = await getCurrentUser();
+  params: {
+    courseId: string;
+  };
+}
 
+const CourseLayout = async (props: CourseLayoutProps) => {
+  const { children } = props;
+  const { courseId } = props.params; // ✅ Extracted inside the function
+
+  const currentUser = await getCurrentUser();
   if (!currentUser) {
     return redirect("/");
   }
 
   const course = await prisma.course.findUnique({
     where: {
-      id: params.courseId,
+      id: courseId,
     },
     include: {
       chapters: {
@@ -42,15 +45,13 @@ const CourseLayout = async ({
     },
   });
 
-  if (!course) {
-    return redirect("/");
-  }
+  if (!course) return redirect("/");
 
-  const progressCount = await getProgress(course.id, currentUser.id);
+  const progressCount = await getProgress(currentUser.id, course.id);
 
   return (
-    <div className=" h-full">
-      <div className=" h-[80px] md:pl-80 fixed inset-y-0 w-full z-50 ">
+    <div className="h-full">
+      <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
         <CourseNavbar course={course} progressCount={progressCount} />
       </div>
       <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">

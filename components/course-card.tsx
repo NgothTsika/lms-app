@@ -9,7 +9,7 @@ import CourseProgress from "./course-progress";
 interface CourseCardProps {
   id: string;
   title: string;
-  imageUrl: string;
+  imageUrl: string | null;
   chaptersLength: number;
   price: number;
   progress: number | null;
@@ -25,18 +25,29 @@ export const CourseCard = ({
   progress,
   category,
 }: CourseCardProps) => {
+  const fallbackImage = "/image/no-image.png";
+
   return (
     <Link href={`/courses/${id}`}>
-      <div className=" group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full shadow-md">
+      <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg h-full shadow-md flex flex-col">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
-          <Image fill className="object-cover" alt={title} src={imageUrl} />
+          <Image
+            fill
+            className="object-cover"
+            alt={title}
+            src={imageUrl || fallbackImage}
+          />
         </div>
-        <div className=" flex flex-col pt-2">
-          <div className=" text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
+
+        <div className="flex flex-col flex-1 p-3">
+          {/* ✅ Title with minimum height for alignment */}
+          <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2 min-h-[48px]">
             {title}
           </div>
-          <p className="text-xs text-muted-foreground ">{category}</p>
-          <div className="my-3 felx items-center gap-x-2 text-sm md:text-xs">
+
+          <p className="text-xs text-muted-foreground">{category}</p>
+
+          <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
               <span>
@@ -44,16 +55,22 @@ export const CourseCard = ({
               </span>
             </div>
           </div>
-          {progress !== null ? (
+
+          {/* price or empty spacer to push progress down */}
+          {progress === null && (
+            <p className="text-md md:text-sm font-medium text-slate-700">
+              {formatPrice(price)}
+            </p>
+          )}
+
+          <div className="flex-1" />
+
+          {progress !== null && (
             <CourseProgress
               size="sm"
               value={progress}
               variant={progress === 100 ? "success" : "default"}
             />
-          ) : (
-            <p className=" text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price)}
-            </p>
           )}
         </div>
       </div>
