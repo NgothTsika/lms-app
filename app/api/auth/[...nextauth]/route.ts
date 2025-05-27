@@ -45,7 +45,10 @@ export const authOptions: AuthOptions = {
           throw new Error("Invalid credentials");
         }
 
-        return user;
+        return {
+          ...user,
+          role: user.role as "TEACHER" | "STUDENT" | "ADMIN" | undefined, // Ensure role matches expected type
+        };
       },
     }),
   ],
@@ -54,6 +57,23 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+        token.role = user.role; // 👈 Save role in JWT
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.sub && token.role) {
+        session.user.id = token.sub;
+        session.user.role = token.role; // 👈 Inject role into session
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

@@ -1,14 +1,12 @@
 import { createUploadthing, type FileRouter } from "uploadthing/server";
 import getCurrentUser from "@/actions/getCurrentUser";
-import { isTeacher } from "@/lib/teacher";
 
 const f = createUploadthing();
 
 const handleAuth = async () => {
   try {
     const currentUser = await getCurrentUser();
-    const isAuthorized = isTeacher(currentUser?.id);
-    if (!currentUser?.id || !isAuthorized) throw new Error("Unauthorized");
+    if (!currentUser?.id) throw new Error("Unauthorized");
     return { currentUser: currentUser };
   } catch (error) {
     console.error("UploadThing Auth Error:", error);

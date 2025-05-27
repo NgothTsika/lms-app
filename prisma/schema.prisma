@@ -6,6 +6,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
 
 model User {
   id             String   @id @default(uuid())
@@ -14,6 +19,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
+  role           Role     @default(STUDENT) 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   accounts       Account[]

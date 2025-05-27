@@ -1,14 +1,16 @@
-import { isTeacher } from "@/lib/teacher";
-import { redirect } from "next/navigation";
 import getCurrentUser from "@/actions/getCurrentUser";
+import { redirect } from "next/navigation";
 
-const layout = async ({ children }: { children: React.ReactNode }) => {
-  const currentUser = await getCurrentUser();
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getCurrentUser();
 
-  if (!isTeacher(currentUser?.id)) {
+  if (!user || user.role !== "TEACHER") {
     return redirect("/");
   }
-  return <>{children}</>;
-};
 
-export default layout;
+  return <>{children}</>;
+}

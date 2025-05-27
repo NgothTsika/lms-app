@@ -7,10 +7,7 @@ import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
 
 interface SearchPageProps {
-  searchParams: {
-    title: string;
-    categoryId: string;
-  };
+  searchParams: Record<string, string | string[] | undefined>;
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
@@ -18,6 +15,9 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   if (!currentUser) {
     return redirect("/");
   }
+
+  const title = searchParams.title as string | undefined;
+  const categoryId = searchParams.categoryId as string | undefined;
 
   const categories = await prisma.category.findMany({
     orderBy: {
@@ -27,7 +27,8 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
 
   const courses = await getCourses({
     userId: currentUser.id,
-    ...searchParams,
+    title,
+    categoryId,
   });
 
   return (

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { Role } from "@/lib/roles";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,6 +27,8 @@ export const NavbarRoutes = () => {
     signOut({ callbackUrl: "/" });
   };
 
+  // ✅ Use enum for type safety
+  const isTeacher = session?.user?.role === Role.TEACHER;
   return (
     <>
       {isSearchPage && (
@@ -33,15 +36,18 @@ export const NavbarRoutes = () => {
           <SearchInput />
         </div>
       )}
+
       <div className="flex gap-x-2 ml-auto items-center">
-        {isTeacherPage || isCoursePage ? (
+        {(isTeacherPage || isCoursePage) && (
           <Link href="/">
             <Button size="sm" variant="ghost">
               <LogOut className="h-4 w-4 mr-2" />
               Exit
             </Button>
           </Link>
-        ) : (
+        )}
+
+        {isTeacher && !isTeacherPage && (
           <Link href="/teacher/courses">
             <Button size="sm" variant="ghost">
               Teacher mode
