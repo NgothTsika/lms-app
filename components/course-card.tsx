@@ -25,7 +25,7 @@ export const CourseCard = ({
   progress,
   category,
 }: CourseCardProps) => {
-  const fallbackImage = "/image/no-image.png";
+  const fallbackImage = "/images/avatar.png";
 
   return (
     <Link href={`/courses/${id}`}>
