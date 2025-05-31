@@ -14,6 +14,10 @@ interface CourseCardProps {
   price: number;
   progress: number | null;
   category: string;
+  author: {
+    name: string;
+    image: string | null;
+  };
 }
 
 export const CourseCard = ({
@@ -24,8 +28,10 @@ export const CourseCard = ({
   price,
   progress,
   category,
+  author,
 }: CourseCardProps) => {
   const fallbackImage = "/images/avatar.png";
+  const authorImage = author?.image || "/images/avatar.png";
 
   return (
     <Link href={`/courses/${id}`}>
@@ -44,8 +50,21 @@ export const CourseCard = ({
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2 min-h-[48px]">
             {title}
           </div>
-
-          <p className="text-xs text-muted-foreground">{category}</p>
+          <div className=" flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">{category}</p>
+            <div className="flex items-center gap-2">
+              <Image
+                src={authorImage}
+                alt={author.name}
+                width={24}
+                height={24}
+                className="rounded-full object-cover"
+              />
+              <span className="text-xs text-slate-600 line-clamp-1">
+                {author.name}
+              </span>
+            </div>
+          </div>
 
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">
