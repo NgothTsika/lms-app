@@ -15,6 +15,7 @@ import {
 interface CourseCardProps {
   id: string;
   title: string;
+  description: string;
   imageUrl: string | null;
   chaptersLength: number;
   price: number;
@@ -35,6 +36,7 @@ export const CourseCard = ({
   progress,
   category,
   author,
+  description,
 }: CourseCardProps) => {
   const fallbackImage = "/images/avatar.png";
   const authorImage = author?.image || "/images/avatar.jpeg";
@@ -55,6 +57,7 @@ export const CourseCard = ({
           {/* ✅ Title with minimum height for alignment */}
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2 min-h-[48px]">
             {title}
+            <p>{description}</p>
           </div>
           <div className=" flex items-center justify-between">
             <p className="text-xs text-muted-foreground">{category}</p>

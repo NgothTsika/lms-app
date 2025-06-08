@@ -79,12 +79,12 @@ const ChapterIdPage = async (props: ChapterIdPageProps) => {
               <CourseEnrollButton courseId={courseId} price={course.price!} />
             )}
           </div>
-          <hr />
-          <div>
-            <Preview value={chapter.description!} />
-          </div>
           {!!attachments.length && (
             <>
+              <hr />
+              <div>
+                <Preview value={chapter.description!} />
+              </div>
               <hr />
               <div className="p-4">
                 {attachments.map((attachment) => (
