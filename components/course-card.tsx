@@ -55,11 +55,10 @@ export const CourseCard = ({
 
         <div className="flex flex-col flex-1 p-3">
           {/* ✅ Title with minimum height for alignment */}
-          <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2 min-h-[48px]">
+          <div className="text-sm md:text-[15px] font-medium group-hover:text-sky-700 transition line-clamp-2 min-h-[48px]">
             {title}
-            <p>{description}</p>
           </div>
-          <div className=" flex items-center justify-between">
+          <div className=" flex items-center justify-between mt-2.5">
             <p className="text-xs text-muted-foreground">{category}</p>
 
             <TooltipProvider delayDuration={100}>
@@ -74,7 +73,7 @@ export const CourseCard = ({
                       className="rounded-full object-cover border-yellow-400 border "
                     />
                     <TooltipContent>
-                      <span className="text-xs text-slate-600 line-clamp-1">
+                      <span className="text-xs text-white line-clamp-1">
                         {author.name}
                       </span>
                     </TooltipContent>
